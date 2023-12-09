@@ -3,6 +3,56 @@ using UnityEngine;
 using NaughtyAttributes;
 using System;
 
+public class GameGrid
+{
+    public bool Generated { get { return _generated; } }
+
+    public GameGrid(GridConfig config, Vector3 anchorPosition)
+    {
+        _gridConfig = config;
+        _anchorPosition = anchorPosition != null ? anchorPosition : Vector3.zero;
+    }
+
+    public void Generate()
+    {
+        GridGenerator.Input input = new GridGenerator.Input()
+        {
+            cellsCount = _gridConfig.CellsCount,
+            cellSize = _gridConfig.CellSize,
+            anchorPosition = _anchorPosition,
+        };
+        _generated = GridGenerator.Generate(ref _gridData, input);
+    }
+
+    public int GetCoordUniqueId(Vector2Int coord)
+    {
+        return coord.x * _gridConfig.CellsCount.x + coord.y;
+    }
+
+    public GridCell GetCellFromCoord(Vector2Int coord)
+    {
+        if (_generated)
+        {
+            return _gridData.Cells[GetCoordUniqueId(coord)];
+        }
+        Debug.LogWarning("[GameGrid] grid is not generated");
+        return null;
+    }
+
+    #region Private
+
+    private bool _generated = false;
+    private GridData _gridData = null;
+
+    private readonly Vector3 _anchorPosition;
+    private readonly GridConfig _gridConfig;
+
+    #endregion Private
+}
+
+
+
+
 public class CellOccupation
 {
     public enum EOccupierType
@@ -69,6 +119,8 @@ public class Grid : MonoBehaviour
 
     [SerializeField] float laneOverflowDistance;
 
+    private bool bGenerated = false;
+
     //[SerializeField] GameObject cellVisualizerPrefab;
 
     public event Action Generated;
@@ -105,7 +157,7 @@ public class Grid : MonoBehaviour
 
             lanesHashset.Add(j, currentLane);
         }
-
+        bGenerated = true;
         Generated?.Invoke();
     }
 
@@ -273,6 +325,8 @@ public class Grid : MonoBehaviour
 
     private void OnDrawGizmos()
     {
+        if (!bGenerated) return;
+
         if (cellsHashset != null)
         {
             {
