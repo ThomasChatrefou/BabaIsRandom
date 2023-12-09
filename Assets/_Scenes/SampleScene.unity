@@ -392,7 +392,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1018049985}
-  - component: {fileID: 1018049984}
   - component: {fileID: 1018049983}
   m_Layer: 0
   m_Name: Grid
@@ -415,26 +414,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _gridConfig: {fileID: 11400000, guid: f0a5a53df00fb7e4fa15083aa09ff5e5, type: 2}
   _anchor: {fileID: 341344517}
---- !u!114 &1018049984
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1018049982}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 61f27648b828bda44a8397fcf71f3cb7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  anchor: {fileID: 0}
-  nbCellsX: 0
-  nbCellsY: 0
-  NumberOfColumnBackGarden: 0
-  NumberOfColumnFrontGarden: 0
-  cellSizeX: 0
-  cellSizeY: 0
-  laneOverflowDistance: 0
 --- !u!4 &1018049985
 Transform:
   m_ObjectHideFlags: 0
