@@ -1,9 +1,8 @@
-using System;
 using NaughtyAttributes;
 using UnityEngine;
 
 [ExecuteInEditMode]
-public class GridHandlerComponent : MonoBehaviour
+public class GridHandlerComponent : WorldBehaviour
 {
     #region Private
 
@@ -16,14 +15,15 @@ public class GridHandlerComponent : MonoBehaviour
             return;
         }
 
-        _gameGrid = new(_gridConfig, _anchor.position);
-        _gameGrid.Generate();
+        World.Grid.Setup(_gridConfig);
+        World.Grid.Generate();
     }
+
+    #region Gizmos
 
     private void OnDrawGizmos()
     {
-        if (_gameGrid == null) return;
-        if (!_gameGrid.Generated) return;
+        if (!World.Grid.Generated) return;
 
         Gizmos.color = Color.red;
 
@@ -41,30 +41,30 @@ public class GridHandlerComponent : MonoBehaviour
         {
             DrawLine(new Vector2Int(i, 0), new Vector2Int(i, count.y - 1), count, size, rightLineSigns);
         }
-        for (int i = 0; i < count.x; i++)
+        for (int i = 0; i < count.y; i++)
         {
             DrawLine(new Vector2Int(0, i), new Vector2Int(count.x - 1, i), count, size, topLineSigns);
+        }
+        foreach (GridCell cell in World.Grid.Cells)
+        {
+            Gizmos.DrawWireCube(cell.Position, 0.1f * new Vector3(size.x, size.y, 0f));
         }
     }
 
     private void DrawLine(Vector2Int startCoord, Vector2Int endCoord, Vector2Int count, Vector2 size, sbyte[,] signs)
     {
-        GridCell startCell = _gameGrid.GetCellFromCoord(startCoord);
-        GridCell endCell = _gameGrid.GetCellFromCoord(endCoord);
+        GridCell startCell = World.Grid.GetCellFromCoord(startCoord);
+        GridCell endCell = World.Grid.GetCellFromCoord(endCoord);
 
         Vector3 start = startCell.Position + 0.5f * new Vector3(signs[0, 0] * size.x, signs[0, 1] * size.y, 0f);
         Vector3 end = endCell.Position + 0.5f * new Vector3(signs[1, 0] * size.x, signs[1, 1] * size.y, 0f);
         Gizmos.DrawLine(start, end);
     }
 
+    #endregion Gizmos
 
     [SerializeField]
     private GridConfig _gridConfig;
-    [SerializeField]
-    private Transform _anchor;
-
-    [NonSerialized]
-    private GameGrid _gameGrid = null;
 
     #endregion Private
 }
