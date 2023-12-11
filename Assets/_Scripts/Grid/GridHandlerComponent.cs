@@ -17,6 +17,22 @@ public class GridHandlerComponent : WorldBehaviour
 
         World.Grid.Setup(_gridConfig);
         World.Grid.Generate();
+
+        transform.localScale = new Vector3(
+            _gridConfig.CellsCount.x * _gridConfig.CellSize.x,
+            _gridConfig.CellsCount.y * _gridConfig.CellSize.y,
+            0f
+            );
+    }
+
+    private void Awake()
+    {
+        Generate();
+    }
+
+    private void Reset()
+    {
+        Generate();
     }
 
     #region Gizmos

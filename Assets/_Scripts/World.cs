@@ -10,10 +10,23 @@ public class World
     }
 
     public GameGrid Grid { get; private set; }
+    public PlayerController Player { get; private set; }
 
     public World()
     {
         Grid = new GameGrid();
+    }
+
+    public void Register(PlayerController player)
+    {
+        Player = player;
+    }
+
+    public bool CheckPlayer()
+    {
+        bool isRegistered = Player != null;
+        if (!isRegistered) Debug.LogWarning("[World] No Player Controller is registered");
+        return isRegistered;
     }
 }
 

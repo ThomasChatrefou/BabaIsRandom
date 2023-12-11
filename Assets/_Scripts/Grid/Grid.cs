@@ -41,6 +41,7 @@ public class GameGrid
     public GridCell GetCellFromCoord(Vector2Int coord)
     {
         if (ThrowWarningIfNotGenerated()) return null;
+        coord.Clamp(Vector2Int.zero, _gridConfig.CellsCount - Vector2Int.one);
         return GetCellFromCoord_NoCheck(coord);
     }
 
@@ -54,8 +55,7 @@ public class GameGrid
             Mathf.RoundToInt(fromAnchor.x / _gridConfig.CellSize.x),
             Mathf.RoundToInt(fromAnchor.y / _gridConfig.CellSize.y
             ));
-        gridCoord.x = Mathf.Clamp(gridCoord.x, 0, _gridConfig.CellsCount.x);
-        gridCoord.y = Mathf.Clamp(gridCoord.y, 0, _gridConfig.CellsCount.y);
+        gridCoord.Clamp(Vector2Int.zero, _gridConfig.CellsCount - Vector2Int.one);
 
         return GetCellFromCoord_NoCheck(gridCoord);
     }

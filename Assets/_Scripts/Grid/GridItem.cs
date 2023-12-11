@@ -1,3 +1,4 @@
-public class GridItem
+public interface IGridItem
 {
+    public GridCell Cell { get; }
 }

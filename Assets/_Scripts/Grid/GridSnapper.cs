@@ -1,3 +1,4 @@
+using NaughtyAttributes;
 using UnityEngine;
 
 [ExecuteInEditMode]
@@ -11,6 +12,7 @@ public class GridSnapper : WorldBehaviour
         if (nearestCell is not null)
         {
             transform.position = nearestCell.Position;
+            _currentCoordinate = nearestCell.Coord;
         }
         transform.hasChanged = false;
     }
@@ -30,8 +32,11 @@ public class GridSnapper : WorldBehaviour
 
     private void OnDisable()
     {
-        World.Grid.OnGenerated += SnapToNearestCell;
+        World.Grid.OnGenerated -= SnapToNearestCell;
     }
+
+    [ShowNonSerializedField]
+    private Vector2Int _currentCoordinate;
 
     #endregion Private
 }
