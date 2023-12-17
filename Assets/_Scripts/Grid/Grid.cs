@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using UnityEngine;
 
-public class GameGrid
+public class Grid
 {
     public bool Generated { get; private set; }
-    public List<GridCell> Cells => _gridData.Cells;
+    public List<Cell> Cells => _gridData.Cells;
 
     public event Action OnGenerated;
 
@@ -38,14 +38,14 @@ public class GameGrid
         return coord.x * _gridConfig.CellsCount.y + coord.y;
     }
 
-    public GridCell GetCellFromCoord(Vector2Int coord)
+    public Cell GetCellFromCoord(Vector2Int coord)
     {
         if (ThrowWarningIfNotGenerated()) return null;
         coord.Clamp(Vector2Int.zero, _gridConfig.CellsCount - Vector2Int.one);
         return GetCellFromCoord_NoCheck(coord);
     }
 
-    public GridCell GetNearestCell(Vector3 worldPosition)
+    public Cell GetNearestCell(Vector3 worldPosition)
     {
         if (ThrowWarningIfNotGenerated()) return null;
 
@@ -69,7 +69,7 @@ public class GameGrid
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    private GridCell GetCellFromCoord_NoCheck(Vector2Int coord)
+    private Cell GetCellFromCoord_NoCheck(Vector2Int coord)
     {
         return _gridData.Cells[GetCoordUniqueId(coord)];
     }

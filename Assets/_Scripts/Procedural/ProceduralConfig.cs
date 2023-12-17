@@ -6,8 +6,12 @@ public class ProceduralConfig : WorldConfig
     public Vector2Int NodeCountRange { get { return _nodeCountRange; } }
     public int MaxKeyCountPerNode { get { return _maxKeyCountPerNode; } }
 
+    #region Private
+
     [SerializeField]
     private Vector2Int _nodeCountRange;
     [SerializeField]
     private int _maxKeyCountPerNode;
+
+    #endregion Private
 }

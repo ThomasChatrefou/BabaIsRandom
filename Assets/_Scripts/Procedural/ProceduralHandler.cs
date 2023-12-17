@@ -1,14 +1,26 @@
-using System;
 using System.Collections.Generic;
 using NaughtyAttributes;
 using UnityEngine;
 
 [ExecuteInEditMode]
 [RequireComponent(typeof(IProceduralTranslator))]
-public class ProceduralHandler : WorldBehaviour
+public class ProceduralHandler : WorldBehaviour, IConfigurableComponent
 {
-    [Button]
-    private void Generate()
+    #region Editor
+
+    [Button] public void Generate() => Generate_Internal();
+    [Button] public void Solve() => Solve_Internal();
+
+    public string GetConfigPropertyName()
+    {
+        return "_proceduralConfig";
+    }
+
+    #endregion Editor
+
+    #region Private
+
+    private void Generate_Internal()
     {
         if (_proceduralConfig == null)
         {
@@ -16,53 +28,38 @@ public class ProceduralHandler : WorldBehaviour
             return;
         }
 
-        _generator.Setup(_proceduralConfig);
-        if (!_useCustomSeed) _seed = _generator.GenerateSeed();
-        _generator.Generate(_seed);
-        PrintNodes();
-    }
+        if (!_useCustomSeed) _seed = ProceduralGenerator.GenerateSeed();
 
-    [Button]
-    private void Translate()
-    {
-        _translator = GetComponent<IProceduralTranslator>();
-        _translator.Translate(_generator.Nodes);
-    }
-
-    [Button]
-    private void PrintNodes()
-    {
-        Debug.Log($"Nb nodes generated : {_generator.Nodes.Count}");
-        foreach(Node node in _generator.Nodes)
+        ProceduralGenerator.Input input = new()
         {
-            string childrenStr = ListToString(node.Children, _generator.Nodes);
-            string keysStr = ListToString(node.Keys, _generator.Nodes);
+            NodeCountRange = _proceduralConfig.NodeCountRange,
+            MaxKeyCountPerNode = _proceduralConfig.MaxKeyCountPerNode,
+            Seed = _seed,
+        };
+        ProceduralGenerator.Generate(ref _nodes, input);
 
-            Debug.Log($"[Node {node.AsciiChar}] : Children nodes : [" + childrenStr + "]; Keys : [" + keysStr + "]. ");
-        }
+        _translator ??= GetComponent<IProceduralTranslator>();
+        _translator.TranslateGraph(_nodes);
     }
 
-    private string ListToString(List<int> input, List<Node> nodes)
+    private void Solve_Internal()
     {
-        List<string> strings = new();
-        foreach (int element in input)
-        {
-            strings.Add(nodes[element].AsciiChar.ToString());
-        }
-        return string.Join(", ", strings);
+        List<string> outputPaths = new();
+        ProceduralSolver.Solve(ref outputPaths, _nodes);
+        _translator ??= GetComponent<IProceduralTranslator>();
+        _translator.TranslateSolutions(outputPaths);
     }
     
     [SerializeField] 
     private ProceduralConfig _proceduralConfig;
-    [SerializeField]
-    private IProceduralTranslator _translator;
-
     [SerializeField]
     private bool _useCustomSeed;
     [EnableIf("_useCustomSeed")]
     [SerializeField]
     private int _seed;
 
-    [NonSerialized]
-    private ProceduralGenerator _generator = new();
+    private IProceduralTranslator _translator;
+    private List<Node> _nodes = new();
+
+    #endregion Private
 }

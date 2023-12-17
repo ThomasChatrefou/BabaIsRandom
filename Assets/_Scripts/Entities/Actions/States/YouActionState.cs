@@ -4,12 +4,12 @@ public class YouActionState : IActionState
 {
     public void OnPlayerMove(IEntityStateMachine context, Vector2Int direction)
     {
-        GridCell newCell = context.Entity.World.Grid.GetCellFromCoord(context.Entity.Cell.Coord + direction);
+        Cell newCell = context.Entity.World.Grid.GetCellFromCoord(context.Entity.Cell.Coord + direction);
         if (newCell == context.Entity.Cell) return;
         context.Entity.TryMoveTo(newCell);
     }
 
-    public bool OnTryEnterCell(IEntityStateMachine context, GridCell newCell)
+    public bool OnTryEnterCell(IEntityStateMachine context, Cell newCell)
     {
         bool canEnter = true;
         foreach (GameEntity entity in newCell.Entities)
@@ -18,7 +18,7 @@ public class YouActionState : IActionState
             if (entity.State is PushActionState push)
             {
                 Vector2Int nextCoord = 2 * entity.Cell.Coord - context.Entity.Cell.Coord;
-                GridCell nextCell = context.Entity.World.Grid.GetCellFromCoord(nextCoord);
+                Cell nextCell = context.Entity.World.Grid.GetCellFromCoord(nextCoord);
                 if (nextCell == entity.Cell)
                 {
                     canEnter = false;

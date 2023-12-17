@@ -1,22 +1,22 @@
-using System.Linq;
 using NaughtyAttributes.Editor;
+using System.Linq;
 using UnityEditor;
 
-[CustomEditor(typeof(GridHandlerComponent))]
-public class GridHandlerComponentInspector : NaughtyInspector
+public class ConfigurableComponentInspector : NaughtyInspector
 {
-    private GridConfig _gridConfig;
+    private WorldConfig _config;
     private bool _fold = false;
     public override void OnInspectorGUI()
     {
         base.OnInspectorGUI();
         serializedObject.Update();
-        _gridConfig = (GridConfig)serializedObject.FindProperty("_gridConfig").objectReferenceValue;
+        string propName = (serializedObject.targetObject as IConfigurableComponent).GetConfigPropertyName();
+        _config = (WorldConfig)serializedObject.FindProperty(propName).objectReferenceValue;
 
         _fold = EditorGUILayout.BeginFoldoutHeaderGroup(_fold, "Open Config");
         if (_fold)
         {
-            SerializedObject so = new(_gridConfig);
+            SerializedObject so = new(_config);
             DrawNaughtyPropertiesExcluding(so, "m_Script");
             so.ApplyModifiedProperties();
         }
