@@ -1,18 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static Words;
 
-public class StateYou : MonoBehaviour
+public class StateYou : Words
 {
-    // Start is called before the first frame update
-    void Start()
+    public override string GiveTypeToUse()
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        return "You";
     }
 }

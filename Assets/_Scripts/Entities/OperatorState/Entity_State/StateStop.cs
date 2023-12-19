@@ -1,18 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static Words;
 
-public class StateStop : MonoBehaviour
+public class StateStop : Words
 {
-    // Start is called before the first frame update
-    void Start()
+    
+    public override string GiveTypeToUse()
     {
-        
+        return "Stop";
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+   
 }

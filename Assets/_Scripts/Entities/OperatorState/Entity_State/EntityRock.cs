@@ -11,9 +11,18 @@ public class EntityRock : Words
     {
         string tag = "Rock";
         _rocks = GameObject.FindGameObjectsWithTag(tag);
+        GiveListObject();
     }
     public override GameObject[] GiveListObject()
     {
+        /*test pour le futur is*/
+         
+        if (_rocks[0].TryGetComponent<GameEntityHandler>(out GameEntityHandler geh))
+        {
+            //Debug.Log("youpi ta race"+geh.GetEntity().State);
+            //geh.GetEntity().SetIsDefeat();
+        }
+        //
         return _rocks;
     }
 }

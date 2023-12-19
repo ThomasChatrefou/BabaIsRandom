@@ -1,10 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
+using UnityEditorInternal;
 using UnityEngine;
 
-public class StatePush : MonoBehaviour
+public class StatePush : Words
 {
-    //IActionState State;
-    
+    public override string GiveTypeToUse()
+    {
+        return "Push";
+    }
+
 }

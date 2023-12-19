@@ -2,17 +2,33 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ISState : MonoBehaviour
+public class ISState : WorldBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+  
+    public GameObject[] _rocks;
+    public GameObject _topCellWord;
+    public GameObject _downCellWord;
+    public GameObject _leftCellWord;
+    public GameObject _rightCellWord;
 
-    // Update is called once per frame
-    void Update()
+  
+
+    /*update pour test*/
+    private void Update()
     {
-        
+        if (_topCellWord.TryGetComponent<Words>(out Words geh))
+        {
+            Debug.Log(geh);
+            Debug.Log("avant le changement " + geh.GiveTypeToUse());
+
+
+        }
     }
+    
+      
+           
+        
+        
+    
+
 }

@@ -33,7 +33,10 @@ public class GameEntityHandler : WorldBehaviour
     }
 
     private GameEntity _entity;
-
+    public GameEntity GetEntity()
+    {
+        return _entity;
+    }
     // Temp for debug
     [Serializable]
     private enum State
