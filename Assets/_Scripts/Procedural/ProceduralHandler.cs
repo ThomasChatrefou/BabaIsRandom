@@ -7,7 +7,8 @@ using UnityEngine;
 public class ProceduralHandler : WorldBehaviour, IConfigurableComponent
 {
     #region Editor
-
+    public bool _useCustomSeed;
+    public int _seed;
     [Button] public void Generate() => Generate_Internal();
     [Button] public void Solve() => Solve_Internal();
 
@@ -52,11 +53,11 @@ public class ProceduralHandler : WorldBehaviour, IConfigurableComponent
     
     [SerializeField] 
     private ProceduralConfig _proceduralConfig;
-    [SerializeField]
-    private bool _useCustomSeed;
+   
+    
     [EnableIf("_useCustomSeed")]
-    [SerializeField]
-    private int _seed;
+    
+    
 
     private IProceduralTranslator _translator;
     private List<Node> _nodes = new();

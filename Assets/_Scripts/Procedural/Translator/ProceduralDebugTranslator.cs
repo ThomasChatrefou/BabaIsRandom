@@ -5,7 +5,7 @@ using UnityEngine;
 // Must be a WorldB (MonoB) to be a component
 public class ProceduralDebugTranslator : WorldBehaviour, IProceduralTranslator
 {
-    public event Action<List<string>> OnGraphTranslated;
+    public event Action<List<string>,List<Node>> OnGraphTranslated;
     public event Action<List<string>> OnSolutionTranslated;
 
     public void TranslateGraph(List<Node> nodes)
@@ -19,7 +19,7 @@ public class ProceduralDebugTranslator : WorldBehaviour, IProceduralTranslator
             outputLogs.Add($"[Node {node.AsciiName}] : Children nodes : [" + childrenStr + "]; Keys : [" + keysStr + "]. ");
             Debug.Log(outputLogs[^1]);
         }
-        OnGraphTranslated?.Invoke(outputLogs);
+        OnGraphTranslated?.Invoke(outputLogs,nodes);
     }
 
     public void TranslateSolutions(List<string> paths)

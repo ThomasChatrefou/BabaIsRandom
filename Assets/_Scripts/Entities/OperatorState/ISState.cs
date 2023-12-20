@@ -13,7 +13,7 @@ public class ISState : WorldBehaviour
 
   
 
-    /*update pour test*/
+    /*update pour test
     private void Update()
     {
         if (_topCellWord.TryGetComponent<Words>(out Words geh))
@@ -24,7 +24,7 @@ public class ISState : WorldBehaviour
 
         }
     }
-    
+    */
       
            
         
