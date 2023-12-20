@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class GameEntity : WorldEntity
 {
-    public GridCell Cell { get; private set; }
+    public Cell Cell { get; private set; }
     public ActionStateMachine Context { get; private set; }
     public IActionState State => Context.CurrentState;
 
@@ -24,7 +24,7 @@ public class GameEntity : WorldEntity
     public void SetIsWin() => Context.SetState(new WinActionState());
     public void SetIsDefeat() => Context.SetState(new DefeatActionState());
 
-    public bool TryMoveTo(GridCell newCell)
+    public bool TryMoveTo(Cell newCell)
     {
         if (Context.OnTryEnterCell(newCell))
         {

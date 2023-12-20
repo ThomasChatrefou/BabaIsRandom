@@ -9,7 +9,7 @@ public interface IEntityStateMachine
 public interface IActionState
 {
     public void OnPlayerMove(IEntityStateMachine context, Vector2Int direction);
-    public bool OnTryEnterCell(IEntityStateMachine context, GridCell newCell);
+    public bool OnTryEnterCell(IEntityStateMachine context, Cell newCell);
     public void OnEntityEnteredCell(IEntityStateMachine context, GameEntity enteringEntity);
 }
 
@@ -36,13 +36,13 @@ public class ActionStateMachine : WorldEntity, IEntityStateMachine
         if (World.CheckPlayer()) World.Player.OnMove -= OnPlayerMove;
     }
 
-    public void UpdateCellCallback(GridCell newCell)
+    public void UpdateCellCallback(Cell newCell)
     {
         Entity.Cell.OnEntityEnteredCell -= OnEntityEnteredCell;
         newCell.OnEntityEnteredCell += OnEntityEnteredCell;
     }
 
     public void OnPlayerMove(Vector2Int direction) => CurrentState.OnPlayerMove(this, direction);
-    public bool OnTryEnterCell(GridCell newCell) => CurrentState.OnTryEnterCell(this, newCell);
+    public bool OnTryEnterCell(Cell newCell) => CurrentState.OnTryEnterCell(this, newCell);
     public void OnEntityEnteredCell(GameEntity enteringEntity) => CurrentState.OnEntityEnteredCell(this, enteringEntity);
 }

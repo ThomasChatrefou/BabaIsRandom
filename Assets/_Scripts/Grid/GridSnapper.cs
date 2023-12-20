@@ -8,7 +8,7 @@ public class GridSnapper : WorldBehaviour
 
     private void SnapToNearestCell()
     {
-        GridCell nearestCell = World.Grid.GetNearestCell(transform.position);
+        Cell nearestCell = World.Grid.GetNearestCell(transform.position);
         if (nearestCell is not null)
         {
             transform.position = nearestCell.Position;

@@ -9,12 +9,12 @@ public class World
         return Instance ??= new World();
     }
 
-    public GameGrid Grid { get; private set; }
+    public Grid Grid { get; private set; }
     public PlayerController Player { get; private set; }
 
     public World()
     {
-        Grid = new GameGrid();
+        Grid = new Grid();
     }
 
     public void Register(PlayerController player)

@@ -6,7 +6,7 @@ public class EmptyActionState : IActionState
     {
     }
 
-    public bool OnTryEnterCell(IEntityStateMachine context, GridCell newCell)
+    public bool OnTryEnterCell(IEntityStateMachine context, Cell newCell)
     {
         return true;
     }

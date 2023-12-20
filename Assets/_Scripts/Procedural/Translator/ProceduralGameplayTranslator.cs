@@ -3,8 +3,13 @@ using UnityEngine;
 
 public class ProceduralGameplayTranslator : WorldBehaviour, IProceduralTranslator
 {
-    public void Translate(List<Node> nodes)
+    public void TranslateGraph(List<Node> nodes)
     {
-        Debug.Log($"[ProceduralGameplayTranslator] coucou");
+        Debug.Log($"[ProceduralGameplayTranslator] translating graph...");
+    }
+
+    public void TranslateSolutions(List<string> paths)
+    {
+        Debug.Log($"[ProceduralGameplayTranslator] translating solutions...");
     }
 }

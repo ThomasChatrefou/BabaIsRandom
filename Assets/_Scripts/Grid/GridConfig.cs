@@ -8,13 +8,10 @@ public class GridConfig : WorldConfig
     public Vector2 CellSize { get { return _cellSize; } }
     public Vector2 OffsetPosition { get { return _offsetPosition; } }
 
+    public void DirtyGrid() => World.Grid.MakeDirty();
+
     #region Private
-
-    private void DirtyGrid()
-    {
-        World.Grid.MakeDirty();
-    }
-
+    
     [SerializeField]
     [OnValueChanged("DirtyGrid")]
     private Vector2Int _cellsCount;

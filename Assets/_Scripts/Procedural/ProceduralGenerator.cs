@@ -1,60 +1,51 @@
 using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
+using UnityEngine;
 using Random = UnityEngine.Random;
 
-public class Node
+public class ProceduralGenerator
 {
-    public int Id { get; private set; }
-    public List<int> Children { get; private set; } = new List<int>();
-    public List<int> Keys { get; private set; } = new List<int>();
-    public char AsciiChar { get; private set; }
-
-    public Node(int id)
+    public struct Input
     {
-        Id = id;
-        AsciiChar = (char)(id + 65);
-    }
-
-    public void AddChildren(int childId)
-    {
-        Children.Add(childId);
-    }
-    
-    public void AddKey(int keyId)
-    {
-        Keys.Add(keyId);
-    }
-}
-
-public class ProceduralGenerator : WorldEntity
-{
-    public List<Node> Nodes { get; private set; } = new();
-
-    public void Setup(ProceduralConfig config)
-    {
-        _config = config;
+        public Vector2Int NodeCountRange;
+        public int MaxKeyCountPerNode;
+        public int Seed;
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public int GenerateSeed()
+    public static int GenerateSeed()
     {
         return Random.Range(UInt16.MinValue, UInt16.MaxValue);
     }
 
-    public void Generate(int seed)
+    public static bool Generate(ref List<Node> outputNodes, Input input)
     {
-        Random.InitState(seed);
-        int nodeCount = Random.Range(_config.NodeCountRange.x, _config.NodeCountRange.y + 1);
-        Nodes = new List<Node> (nodeCount)
+        Debug.Log("[ProceduralGenerator] Generating graph...");
+        Random.InitState(input.Seed);
+        int nodeCount = Random.Range(input.NodeCountRange.x, input.NodeCountRange.y + 1);
+        bool canGenerate = nodeCount > 0;
+        if (canGenerate)
         {
-            new Node(0)
-        };
+            Generate_Internal(ref outputNodes, input, nodeCount);
+            Debug.Log($"[ProceduralGenerator] {nodeCount} nodes generated !");
+        }
+        else
+        {
+            Debug.LogWarning("[ProceduralGenerator] could not generate puzzle");
+        }
+        return canGenerate;
+    }
 
-        for (int i = 1; i < nodeCount; i++)
+    #region Private
+
+    private static void Generate_Internal(ref List<Node> outputNodes, Input input, int count)
+    {
+        outputNodes = new List<Node>(count) { new Node(0) };
+        for (int i = 1; i < count; i++)
         {
-            Nodes.Add(new Node(i));
-            Node parent = Nodes[Random.Range(0, i)];
+            outputNodes.Add(new Node(i));
+            Node parent = outputNodes[Random.Range(0, i)];
 
             List<int> candidates = new(i);
             for (int j = 0; j < i; j++)
@@ -68,18 +59,16 @@ public class ProceduralGenerator : WorldEntity
                 int peek = candidates[peekIdx];
                 candidates.RemoveAt(peekIdx);
 
-                if (Nodes[peek].Keys.Count < _config.MaxKeyCountPerNode)
+                if (outputNodes[peek].Keys.Count < input.MaxKeyCountPerNode)
                 {
                     keyIndex = peek;
                     break;
                 }
             }
-            Node keyLocation = Nodes[keyIndex];
-
             parent.AddChildren(i);
-            keyLocation.AddKey(i);
+            outputNodes[keyIndex].AddKey(i);
         }
     }
 
-    private ProceduralConfig _config;
+    #endregion Private
 }

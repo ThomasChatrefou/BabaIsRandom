@@ -13,29 +13,25 @@ public class GridGenerator
     public static bool Generate(ref GridData data, Input input)
     {
         bool isEmpty = input.CellsCount.x == 0 || input.CellsCount.y == 0;
-        if (!isEmpty)
+        if (isEmpty) return false;
+
+        List<Cell> cells = new(input.CellsCount.x * input.CellsCount.y);
+        Vector2 start = ComputeStartingPosition(input);
+        for (int i = 0; i < input.CellsCount.x; i++)
         {
-            List<GridCell> cells = new()
+            for (int j = 0; j < input.CellsCount.y; j++)
             {
-                Capacity = input.CellsCount.x * input.CellsCount.y
-            };
-            Vector2 start = ComputeStartingPosition(input);
-            for (int i = 0; i < input.CellsCount.x; i++)
-            {
-                for (int j = 0; j < input.CellsCount.y; j++)
-                {
-                    cells.Add(new GridCell(
-                        coord : new Vector2Int(i,j),
-                        position: new Vector3(
-                            x: start.x + i * input.CellSize.x,
-                            y: start.y + j * input.CellSize.y
-                            )
-                        ));
-                }
+                cells.Add(new Cell(
+                    coord : new Vector2Int(i,j),
+                    position: new Vector3(
+                        x: start.x + i * input.CellSize.x,
+                        y: start.y + j * input.CellSize.y
+                        )
+                    ));
             }
-            data = new GridData(cells);
         }
-        return !isEmpty;
+        data = new GridData(cells);
+        return true;
     }
 
     #region Private
