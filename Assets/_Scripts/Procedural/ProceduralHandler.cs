@@ -6,6 +6,8 @@ using UnityEngine;
 [RequireComponent(typeof(IProceduralTranslator))]
 public class ProceduralHandler : WorldBehaviour, IConfigurableComponent
 {
+    public bool UseCustomSeed { get; set; }
+    public int Seed { get; set; }
     public IProceduralTranslator Translator
     {
         get
@@ -16,8 +18,6 @@ public class ProceduralHandler : WorldBehaviour, IConfigurableComponent
     }
 
     #region Editor
-    public bool _useCustomSeed;
-    public int _seed;
     [Button] public void Generate() => Generate_Internal();
     [Button] public void Solve() => Solve_Internal();
     [Button] public void AddNewBranch() => TryExecute(_addNewBranchModifier);
@@ -41,13 +41,13 @@ public class ProceduralHandler : WorldBehaviour, IConfigurableComponent
             return;
         }
 
-        if (!_useCustomSeed) _seed = ProceduralGenerator.GenerateSeed();
+        if (!UseCustomSeed) Seed = ProceduralGenerator.GenerateSeed();
 
         ProceduralGenerator.Input input = new()
         {
             NodeCountRange = _proceduralConfig.NodeCountRange,
             MaxKeyCountPerNode = _proceduralConfig.MaxKeyCountPerNode,
-            Seed = _seed,
+            Seed = Seed,
         };
         ProceduralGenerator.Generate(out _graph, input);
 
@@ -88,11 +88,11 @@ public class ProceduralHandler : WorldBehaviour, IConfigurableComponent
 
     [SerializeField]
     private ProceduralConfig _proceduralConfig;
-    [SerializeField]
-    private bool _useCustomSeed;
-    [SerializeField]
-    [EnableIf("_useCustomSeed")]
-    private int _seed;
+    //[SerializeField]
+    //private bool _useCustomSeed;
+    //[SerializeField]
+    //[EnableIf("_useCustomSeed")]
+    //private int _seed;
     [SerializeField]
     [OnValueChanged("SelectNodes")]
     private List<char> _nodeSelection = new();

@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -7,13 +6,13 @@ using UnityEngine.UI;
 public class UIBehaviour : MonoBehaviour
 {
     /*Ui*/
-   public GameObject templateTextLogs;
-   public GameObject templatePaths;
-   public GameObject templateRootLog;
-   public GameObject templateRootPath;
-   public GameObject templateTreeButton;
-   public GameObject TabNodes;
-   
+    public GameObject templateTextLogs;
+    public GameObject templatePaths;
+    public GameObject templateRootLog;
+    public GameObject templateRootPath;
+    public GameObject templateTreeButton;
+    public GameObject TabNodes;
+
     /*generator*/
     public ProceduralHandler ProHand;
     public TMP_InputField ProHandSeed;
@@ -21,8 +20,8 @@ public class UIBehaviour : MonoBehaviour
 
 
 
-    private void ShowOutputLogs(List<string> outputLogs,List<Node> nodes)
-  {
+    private void ShowOutputLogs(List<string> outputLogs, List<Node> nodes)
+    {
         foreach (Transform enfant in templateRootLog.transform)
         {
             // Destruction de l'enfant
@@ -36,10 +35,10 @@ public class UIBehaviour : MonoBehaviour
         Debug.Log("Evenement logs déclenché");
         foreach (string logs in outputLogs)
         {
-            
+
             GameObject textLog = Instantiate(templateTextLogs, templateRootLog.transform);
             textLog.GetComponent<TextMeshProUGUI>().text = logs;
-            
+
             //ajouter bouton au gameobject -> backup graph -> peut etre meme dans le template 
             //bouton verifie si tu appuies sur ctrl pour choisir plusieurs nodes 
         }
@@ -47,7 +46,7 @@ public class UIBehaviour : MonoBehaviour
         GridLayoutGroup grid = TabNodes.GetComponent<GridLayoutGroup>();
         grid.constraint = GridLayoutGroup.Constraint.FixedColumnCount;
         grid.constraintCount = 1;
-        PrintTree(nodes,treeLevels);
+        PrintTree(nodes, treeLevels);
         Debug.Log(treeLevels.Count);
         for (int level = 0; level < treeLevels.Count; level++)
         {
@@ -62,8 +61,8 @@ public class UIBehaviour : MonoBehaviour
             levelGrid.constraintCount = treeLevels[level].Count;
             foreach (Node node in treeLevels[level])
             {
-                
-                
+
+
                 GameObject TreeButton = Instantiate(templateTreeButton, levelObject.transform);
                 TreeButton.GetComponentInChildren<TextMeshProUGUI>().text = node.AsciiName.ToString();
             }
@@ -86,20 +85,20 @@ public class UIBehaviour : MonoBehaviour
         Debug.Log("Evenement path déclenché");
         foreach (string path in paths)
         {
-            
+
             GameObject textPath = Instantiate(templateTextLogs, templateRootPath.transform);
             textPath.GetComponent<TextMeshProUGUI>().text = path;
             //ajouter bouton au gameobject -> backup graph -> peut etre meme dans le template 
             //bouton verifie si tu appuies sur ctrl pour choisir plusieurs nodes 
         }
     }
- public void UseRandomSeed()
+    public void UseRandomSeed()
     {
-        ProHand._useCustomSeed = !ProHand._useCustomSeed;
+        ProHand.UseCustomSeed = !ProHand.UseCustomSeed;
     }
     private void OnEnable()
     {
-        ProHandSeed.text = ProHand._seed.ToString();
+        ProHandSeed.text = ProHand.Seed.ToString();
 
         /*abonnement aux event*/
         //translatorInstance = new ProceduralDebugTranslator();
@@ -110,18 +109,18 @@ public class UIBehaviour : MonoBehaviour
     {
         if (int.TryParse(ProHandSeed.text, out int seed))
         {
-            ProHand._seed = seed;
+            ProHand.Seed = seed;
         }
-        
+
     }
     public void getSeed()
     {
-        ProHandSeed.text = ProHand._seed.ToString();
+        ProHandSeed.text = ProHand.Seed.ToString();
     }
-    
+
     List<List<Node>> PrintTree(List<Node> nodes, List<List<Node>> treeLevels)
     {
-      
+
         // Initialiser la première ligne avec le nœud racine (A)
         treeLevels.Add(new List<Node> { nodes[0] });
 
@@ -157,8 +156,8 @@ public class UIBehaviour : MonoBehaviour
         return treeLevels;
 
         // Afficher le tableau
-        
+
     }
-    
+
 
 }
