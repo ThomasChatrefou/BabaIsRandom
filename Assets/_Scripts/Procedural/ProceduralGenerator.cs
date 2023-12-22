@@ -19,7 +19,7 @@ public class ProceduralGenerator
         return Random.Range(UInt16.MinValue, UInt16.MaxValue);
     }
 
-    public static bool Generate(ref List<Node> outputNodes, Input input)
+    public static bool Generate(out Graph outputGraph, Input input)
     {
         Debug.Log("[ProceduralGenerator] Generating graph...");
         Random.InitState(input.Seed);
@@ -27,11 +27,14 @@ public class ProceduralGenerator
         bool canGenerate = nodeCount > 0;
         if (canGenerate)
         {
+            List<Node> outputNodes = new();
             Generate_Internal(ref outputNodes, input, nodeCount);
+            outputGraph = new Graph(outputNodes);
             Debug.Log($"[ProceduralGenerator] {nodeCount} nodes generated !");
         }
         else
         {
+            outputGraph = new Graph(new List<Node>());
             Debug.LogWarning("[ProceduralGenerator] could not generate puzzle");
         }
         return canGenerate;
@@ -65,8 +68,8 @@ public class ProceduralGenerator
                     break;
                 }
             }
-            parent.AddChildren(i);
-            outputNodes[keyIndex].AddKey(i);
+            parent.Children.Add(i);
+            outputNodes[keyIndex].Keys.Add(i);
         }
     }
 

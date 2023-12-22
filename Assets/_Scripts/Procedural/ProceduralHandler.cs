@@ -1,15 +1,27 @@
-using System.Collections.Generic;
 using NaughtyAttributes;
+using System.Collections.Generic;
 using UnityEngine;
 
 [ExecuteInEditMode]
 [RequireComponent(typeof(IProceduralTranslator))]
 public class ProceduralHandler : WorldBehaviour, IConfigurableComponent
 {
+    public IProceduralTranslator Translator
+    {
+        get
+        {
+            _translator ??= GetComponent<IProceduralTranslator>();
+            return _translator;
+        }
+    }
+
     #region Editor
 
     [Button] public void Generate() => Generate_Internal();
     [Button] public void Solve() => Solve_Internal();
+    [Button] public void AddNewBranch() => TryExecute(_addNewBranchModifier);
+    [Button] public void AddInBetween() => TryExecute(_addInBetweenModifier);
+    [Button] public void DeleteNode() => TryExecute(_deleteNodeModifier);
 
     public string GetConfigPropertyName()
     {
@@ -36,30 +48,60 @@ public class ProceduralHandler : WorldBehaviour, IConfigurableComponent
             MaxKeyCountPerNode = _proceduralConfig.MaxKeyCountPerNode,
             Seed = _seed,
         };
-        ProceduralGenerator.Generate(ref _nodes, input);
+        ProceduralGenerator.Generate(out _graph, input);
 
-        _translator ??= GetComponent<IProceduralTranslator>();
-        _translator.TranslateGraph(_nodes);
+        Translator.TranslateGraph(_graph);
     }
 
     private void Solve_Internal()
     {
         List<string> outputPaths = new();
-        ProceduralSolver.Solve(ref outputPaths, _nodes);
-        _translator ??= GetComponent<IProceduralTranslator>();
-        _translator.TranslateSolutions(outputPaths);
+        ProceduralSolver.Solve(ref outputPaths, _graph);
+        Translator.TranslateSolutions(outputPaths);
     }
-    
-    [SerializeField] 
+
+    private void TryExecute(IProceduralGraphModifier modifier)
+    {
+        if (modifier.Check(_graph, _selector))
+        {
+            modifier.Execute(ref _graph, _selector);
+            Translator.TranslateGraph(_graph);
+        }
+    }
+
+    private void SelectNodes()
+    {
+        _selector.MultiSelect_Clear();
+        List<int> nodeIds = new();
+        foreach (char name in _nodeSelection)
+        {
+            nodeIds.Add(_graph.GetNodeIdFromAscii(name));
+        }
+        _selector.MultiSelect(nodeIds);
+    }
+
+    private void OnEnable()
+    {
+        SelectNodes();
+    }
+
+    [SerializeField]
     private ProceduralConfig _proceduralConfig;
     [SerializeField]
     private bool _useCustomSeed;
-    [EnableIf("_useCustomSeed")]
     [SerializeField]
+    [EnableIf("_useCustomSeed")]
     private int _seed;
+    [SerializeField]
+    [OnValueChanged("SelectNodes")]
+    private List<char> _nodeSelection = new();
 
     private IProceduralTranslator _translator;
-    private List<Node> _nodes = new();
+    private Graph _graph = new(new List<Node>());
+    private NodeSelector _selector = new();
+    private AddInBetweenModifier _addInBetweenModifier = new();
+    private AddNewBranchModifier _addNewBranchModifier = new();
+    private DeleteNodeModifier _deleteNodeModifier = new();
 
     #endregion Private
 }

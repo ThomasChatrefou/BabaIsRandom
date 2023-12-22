@@ -19,7 +19,7 @@ public class ProceduralSolver
         }
     }
 
-    public static void Solve(ref List<string> outputPaths, List<Node> inputNodes)
+    public static void Solve(ref List<string> outputPaths, Graph graph)
     {
 
         Debug.Log("[ProceduralSolver] Solving graph...");
@@ -30,20 +30,20 @@ public class ProceduralSolver
             NodesToVisit = new() { 0 },
             Path = ""
         };
-        Solve_Internal(ref outputPaths, initState, inputNodes);
+        Solve_Internal(ref outputPaths, initState, graph);
         Debug.Log($"[ProceduralSolver] {outputPaths.Count} paths found !");
     }
 
     #region Private
 
-    private static void Solve_Internal(ref List<string> outputs, State state, List<Node> nodes)
+    private static void Solve_Internal(ref List<string> outputs, State state, Graph graph)
     {
         if (state.NodesToVisit.Count > 0)
         {
-            foreach (int nodeIdx in state.NodesToVisit)
+            foreach (int nodeId in state.NodesToVisit)
             {
-                State newState = ComputeNextState(new State(state), nodes[nodeIdx]);
-                Solve_Internal(ref outputs, newState, nodes);
+                State newState = ComputeNextState(new State(state), graph.GetNodeFromId(nodeId));
+                Solve_Internal(ref outputs, newState, graph);
             }
         }
         else
