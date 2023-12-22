@@ -1103,7 +1103,8 @@ MonoBehaviour:
   templatePaths: {fileID: 7069052349039941125, guid: 3307347f0b63154428e6e22bc76cbf49, type: 3}
   templateRootLog: {fileID: 263841068}
   templateRootPath: {fileID: 1238294012}
-  TabNodes: {fileID: 0}
+  templateTreeButton: {fileID: 3257984598016355027, guid: 4c4dd3e008d399045bc9b454c9bd5609, type: 3}
+  TabNodes: {fileID: 1077860901}
   ProHand: {fileID: 898198994}
   ProHandSeed: {fileID: 2007447056}
   translatorInstance: {fileID: 898198993}
@@ -2246,7 +2247,7 @@ MonoBehaviour:
   m_ChildAlignment: 0
   m_StartCorner: 0
   m_StartAxis: 0
-  m_CellSize: {x: 100, y: 100}
+  m_CellSize: {x: 40, y: 40}
   m_Spacing: {x: 0, y: 0}
   m_Constraint: 0
   m_ConstraintCount: 2
@@ -4607,7 +4608,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-  m_IsOn: 1
+  m_IsOn: 0
 --- !u!1 &2019918490
 GameObject:
   m_ObjectHideFlags: 0
@@ -4695,6 +4696,18 @@ MonoBehaviour:
       - m_Target: {fileID: 898198994}
         m_TargetAssemblyTypeName: ProceduralHandler, Assembly-CSharp
         m_MethodName: Generate
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 388461092}
+        m_TargetAssemblyTypeName: UIBehaviour, Assembly-CSharp
+        m_MethodName: getSeed
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

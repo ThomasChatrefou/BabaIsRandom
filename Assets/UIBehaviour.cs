@@ -11,14 +11,28 @@ public class UIBehaviour : MonoBehaviour
    public GameObject templatePaths;
    public GameObject templateRootLog;
    public GameObject templateRootPath;
-    public GameObject TabNodes;
+   public GameObject templateTreeButton;
+   public GameObject TabNodes;
+   
     /*generator*/
     public ProceduralHandler ProHand;
     public TMP_InputField ProHandSeed;
     public ProceduralDebugTranslator translatorInstance;
 
+
+
     private void ShowOutputLogs(List<string> outputLogs,List<Node> nodes)
   {
+        foreach (Transform enfant in templateRootLog.transform)
+        {
+            // Destruction de l'enfant
+            Destroy(enfant.gameObject);
+        }
+        foreach (Transform enfant in TabNodes.transform)
+        {
+            // Destruction de l'enfant
+            Destroy(enfant.gameObject);
+        }
         Debug.Log("Evenement logs déclenché");
         foreach (string logs in outputLogs)
         {
@@ -29,13 +43,44 @@ public class UIBehaviour : MonoBehaviour
             //ajouter bouton au gameobject -> backup graph -> peut etre meme dans le template 
             //bouton verifie si tu appuies sur ctrl pour choisir plusieurs nodes 
         }
-        
-            // compter le nombre d'enfant 
-            List<int> ColPerRow = new List<int>();
-            ColPerRow.Add(1);
-        ColPerRow.Add(nodes[0].Children.Count);
-        
-  }
+        List<List<Node>> treeLevels = new List<List<Node>>();
+        GridLayoutGroup grid = TabNodes.GetComponent<GridLayoutGroup>();
+        grid.constraint = GridLayoutGroup.Constraint.FixedColumnCount;
+        grid.constraintCount = 1;
+        PrintTree(nodes,treeLevels);
+        Debug.Log(treeLevels.Count);
+        for (int level = 0; level < treeLevels.Count; level++)
+        {
+            // Créez un GameObject pour chaque niveau
+            GameObject levelObject = new GameObject("Level" + level);
+            levelObject.transform.SetParent(TabNodes.transform);
+            GridLayoutGroup levelGrid = levelObject.AddComponent<GridLayoutGroup>();
+            levelGrid.cellSize = grid.cellSize;
+
+            // Définissez la propriété constraintCount pour ce niveau
+            levelGrid.constraint = GridLayoutGroup.Constraint.FixedColumnCount;
+            levelGrid.constraintCount = treeLevels[level].Count;
+            foreach (Node node in treeLevels[level])
+            {
+                
+                
+                GameObject TreeButton = Instantiate(templateTreeButton, levelObject.transform);
+                TreeButton.GetComponentInChildren<TextMeshProUGUI>().text = node.AsciiName.ToString();
+            }
+        }
+        // test 
+        for (int level = 0; level < treeLevels.Count; level++)
+        {
+            string row = "";
+            foreach (Node node in treeLevels[level])
+            {
+                row += node.AsciiName + " ";
+            }
+            Debug.Log(row);
+        }
+        //
+
+    }
     private void ShowPaths(List<string> paths)
     {
         Debug.Log("Evenement path déclenché");
@@ -69,4 +114,51 @@ public class UIBehaviour : MonoBehaviour
         }
         
     }
+    public void getSeed()
+    {
+        ProHandSeed.text = ProHand._seed.ToString();
+    }
+    
+    List<List<Node>> PrintTree(List<Node> nodes, List<List<Node>> treeLevels)
+    {
+      
+        // Initialiser la première ligne avec le nœud racine (A)
+        treeLevels.Add(new List<Node> { nodes[0] });
+
+        // Construire les niveaux suivants
+        for (int level = 0; level < treeLevels.Count; level++)
+        {
+            List<Node> currentLevel = treeLevels[level];
+            List<Node> nextLevel = new List<Node>();
+
+            foreach (Node node in currentLevel)
+            {
+                foreach (int childId in node.Children)
+                {
+                    Node childNode = nodes.Find(n => n.Id == childId);
+                    nextLevel.Add(childNode);
+                }
+            }
+
+            if (nextLevel.Count > 0)
+            {
+                treeLevels.Add(nextLevel);
+            }
+        }
+        /*for (int level = 0; level < treeLevels.Count; level++)
+        {
+            string row = "";
+            foreach (Node node in treeLevels[level])
+            {
+                row += node.AsciiName + " ";
+            }
+            Debug.Log(row);
+        }*/
+        return treeLevels;
+
+        // Afficher le tableau
+        
+    }
+    
+
 }
