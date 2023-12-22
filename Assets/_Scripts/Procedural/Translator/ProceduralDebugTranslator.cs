@@ -8,15 +8,17 @@ public class ProceduralDebugTranslator : WorldBehaviour, IProceduralTranslator
     public event Action<List<string>,List<Node>> OnGraphTranslated;
     public event Action<List<string>> OnSolutionTranslated;
 
-    public void TranslateGraph(List<Node> nodes)
+    public void TranslateGraph(Graph graph)
     {
         Debug.Log($"[ProceduralDebugTranslator] translating graph...");
         List<string> outputLogs = new();
-        foreach (Node node in nodes)
+        foreach (KeyValuePair<int, Node> pair in graph.Nodes)
         {
-            string childrenStr = ConvertIndexesToNames(node.Children, nodes);
-            string keysStr = ConvertIndexesToNames(node.Keys, nodes);
-            outputLogs.Add($"[Node {node.AsciiName}] : Children nodes : [" + childrenStr + "]; Keys : [" + keysStr + "]. ");
+            Node node = pair.Value;
+            char parentName = graph.IsRootNode(node.Id) ? '-' : graph.FindParentNode(node).AsciiName;
+            string childrenStr = ConvertIndexesToNames(node.Children, graph);
+            string keysStr = ConvertIndexesToNames(node.Keys, graph);
+            outputLogs.Add($"[Node {node.AsciiName}] Parent : {parentName} ; Children nodes : [" + childrenStr + "] ; Keys : [" + keysStr + "]. ");
             Debug.Log(outputLogs[^1]);
         }
         OnGraphTranslated?.Invoke(outputLogs,nodes);
@@ -35,12 +37,12 @@ public class ProceduralDebugTranslator : WorldBehaviour, IProceduralTranslator
 
     #region Private
 
-    private string ConvertIndexesToNames(List<int> input, List<Node> nodes)
+    private string ConvertIndexesToNames(List<int> input, Graph graph)
     {
         List<string> strings = new();
         foreach (int element in input)
         {
-            strings.Add(nodes[element].AsciiName.ToString());
+            strings.Add(graph.GetNodeFromId(element).AsciiName.ToString());
         }
         return string.Join(", ", strings);
     }

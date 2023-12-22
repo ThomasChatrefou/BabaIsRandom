@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class ProceduralGameplayTranslator : WorldBehaviour, IProceduralTranslator
 {
-    public void TranslateGraph(List<Node> nodes)
+    public void TranslateGraph(Graph graph)
     {
         Debug.Log($"[ProceduralGameplayTranslator] translating graph...");
     }
