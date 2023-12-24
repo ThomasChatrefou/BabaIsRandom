@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class ScriptShowHidePanel : MonoBehaviour
@@ -8,6 +6,6 @@ public class ScriptShowHidePanel : MonoBehaviour
 
     public void ShowHidePanel()
     {
-        Panel.SetActive(!Panel.active);
+        Panel.SetActive(!Panel.activeSelf);
     }
 }

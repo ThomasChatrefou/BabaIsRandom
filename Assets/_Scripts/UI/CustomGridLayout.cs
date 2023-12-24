@@ -1,14 +1,15 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-[RequireComponent(typeof(UnityEngine.UI.GridLayoutGroup))]
+[RequireComponent(typeof(GridLayoutGroup))]
 public class CustomGridLayout : MonoBehaviour
 {
-    public GridLayoutGroup gridLayoutGroup;
-    public GameObject itemPrefab;
-    public List<string> itemList;
+    public GridLayoutGroup GridLayoutGroup;
+    public GameObject ItemPrefab;
+    public List<string> ItemList;
+
+    // Should we keep this ?
     /*
     void Start()
     {

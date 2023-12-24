@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e665486278ee61d4e814196ba801cc71, type: 3}
   m_Name: AS_ProceduralConfig
   m_EditorClassIdentifier: 
-  _nodeCountRange: {x: 5, y: 5}
+  _nodeCountRange: {x: 6, y: 8}
   _maxKeyCountPerNode: 100
