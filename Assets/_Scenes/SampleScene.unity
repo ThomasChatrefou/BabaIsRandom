@@ -1107,6 +1107,7 @@ MonoBehaviour:
   TabNodes: {fileID: 1077860901}
   ProHand: {fileID: 898198994}
   ProHandSeed: {fileID: 2007447056}
+  ProHandNodeCount: {fileID: 1010463462}
   translatorInstance: {fileID: 898198993}
 --- !u!1001 &406973451
 PrefabInstance:
@@ -1909,9 +1910,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 397ee365a140b5b4081f2458d67539e9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _useCustomSeed: 1
-  _seed: 39621
   _proceduralConfig: {fileID: 11400000, guid: a34fda564592cd14d9456ef6c7d1b53a, type: 2}
+  _nodeSelection: 
 --- !u!224 &898198995
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2113,7 +2113,19 @@ MonoBehaviour:
   m_CharacterLimit: 0
   m_OnEndEdit:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 388461092}
+        m_TargetAssemblyTypeName: UIBehaviour, Assembly-CSharp
+        m_MethodName: ChangeInput
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_OnSubmit:
     m_PersistentCalls:
       m_Calls: []
@@ -4608,7 +4620,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-  m_IsOn: 0
+  m_IsOn: 1
 --- !u!1 &2019918490
 GameObject:
   m_ObjectHideFlags: 0

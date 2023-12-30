@@ -8,6 +8,7 @@ public class ProceduralHandler : WorldBehaviour, IConfigurableComponent
 {
     public bool UseCustomSeed { get; set; }
     public int Seed { get; set; }
+    public ProceduralGenerator.Input ProGenInput;
     public IProceduralTranslator Translator
     {
         get
@@ -28,7 +29,11 @@ public class ProceduralHandler : WorldBehaviour, IConfigurableComponent
     {
         return "_proceduralConfig";
     }
-
+    public ProceduralGenerator.Input GetInput()
+    {
+        OnEnable();
+        return ProGenInput;
+    }
     #endregion Editor
 
     #region Private
@@ -43,13 +48,10 @@ public class ProceduralHandler : WorldBehaviour, IConfigurableComponent
 
         if (!UseCustomSeed) Seed = ProceduralGenerator.GenerateSeed();
 
-        ProceduralGenerator.Input input = new()
-        {
-            NodeCountRange = _proceduralConfig.NodeCountRange,
-            MaxKeyCountPerNode = _proceduralConfig.MaxKeyCountPerNode,
-            Seed = Seed,
-        };
-        ProceduralGenerator.Generate(out _graph, input);
+        
+        ProGenInput.Seed = Seed;
+    
+        ProceduralGenerator.Generate(out _graph, ProGenInput);
 
         Translator.TranslateGraph(_graph);
     }
@@ -84,6 +86,16 @@ public class ProceduralHandler : WorldBehaviour, IConfigurableComponent
     private void OnEnable()
     {
         SelectNodes();
+        ProceduralGenerator.Input input = new()
+        {
+            NodeCountRange = _proceduralConfig.NodeCountRange,
+            MaxKeyCountPerNode = _proceduralConfig.MaxKeyCountPerNode,
+            Seed = Seed,
+        };
+        
+        ProGenInput = input;
+
+        Debug.Log(this.gameObject);
     }
 
     [SerializeField]

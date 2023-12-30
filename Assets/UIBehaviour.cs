@@ -16,6 +16,7 @@ public class UIBehaviour : MonoBehaviour
     /*generator*/
     public ProceduralHandler ProHand;
     public TMP_InputField ProHandSeed;
+    public TMP_InputField ProHandNodeCount;
     public ProceduralDebugTranslator translatorInstance;
 
 
@@ -82,7 +83,12 @@ public class UIBehaviour : MonoBehaviour
     }
     private void ShowPaths(List<string> paths)
     {
-        Debug.Log("Evenement path déclenché");
+        foreach (Transform enfant in templateRootPath.transform)
+        {
+            // Destruction de l'enfant
+            Destroy(enfant.gameObject);
+        }
+        //Debug.Log("Evenement path déclenché");
         foreach (string path in paths)
         {
 
@@ -99,7 +105,11 @@ public class UIBehaviour : MonoBehaviour
     private void OnEnable()
     {
         ProHandSeed.text = ProHand.Seed.ToString();
-
+        ProceduralGenerator.Input Input = ProHand.GetInput();
+        Debug.Log(Input.NodeCountRange);
+        ProHandNodeCount.text = Input.NodeCountRange.x.ToString();
+        
+        
         /*abonnement aux event*/
         //translatorInstance = new ProceduralDebugTranslator();
         translatorInstance.OnGraphTranslated += ShowOutputLogs;
@@ -111,7 +121,14 @@ public class UIBehaviour : MonoBehaviour
         {
             ProHand.Seed = seed;
         }
-
+    }
+    public void ChangeInput()
+    {
+        if (int.TryParse(ProHandNodeCount.text, out int count))
+        {
+            ProHand.ProGenInput.NodeCountRange.x = count;
+            ProHand.ProGenInput.NodeCountRange.y = count;
+        }
     }
     public void getSeed()
     {

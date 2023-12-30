@@ -4,7 +4,7 @@ using UnityEngine.InputSystem;
 
 public class Debugger : MonoBehaviour
 {
-    [MenuItem("GameObject/Tools/Debugger")]
+    //[MenuItem("GameObject/Tools/Debugger")]
     public static void Init()
     {
         GameObject go = new("Debugger");
