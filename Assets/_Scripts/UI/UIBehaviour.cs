@@ -17,6 +17,7 @@ public class UIBehaviour : MonoBehaviour
     public ProceduralHandler ProHand;
     public TMP_InputField ProHandSeed;
     public ProceduralDebugTranslator TranslatorInstance;
+    public TMP_InputField ProHandNodeCount;
 
     public void UseRandomSeed()
     {
@@ -49,7 +50,7 @@ public class UIBehaviour : MonoBehaviour
             // Destruction de l'enfant
             Destroy(enfant.gameObject);
         }
-        Debug.Log("Evenement logs déclenché");
+        Debug.Log("Evenement logs dï¿½clenchï¿½");
         foreach (string logs in outputLogs)
         {
 
@@ -67,13 +68,13 @@ public class UIBehaviour : MonoBehaviour
         Debug.Log(treeLevels.Count);
         for (int level = 0; level < treeLevels.Count; level++)
         {
-            // Créez un GameObject pour chaque niveau
+            // Crï¿½ez un GameObject pour chaque niveau
             GameObject levelObject = new GameObject("Level" + level);
             levelObject.transform.SetParent(TabNodes.transform);
             GridLayoutGroup levelGrid = levelObject.AddComponent<GridLayoutGroup>();
             levelGrid.cellSize = grid.cellSize;
 
-            // Définissez la propriété constraintCount pour ce niveau
+            // Dï¿½finissez la propriï¿½tï¿½ constraintCount pour ce niveau
             levelGrid.constraint = GridLayoutGroup.Constraint.FixedColumnCount;
             levelGrid.constraintCount = treeLevels[level].Count;
             foreach (Node node in treeLevels[level])
@@ -102,7 +103,7 @@ public class UIBehaviour : MonoBehaviour
             // Destruction de l'enfant
             Destroy(enfant.gameObject);
         }
-        Debug.Log("Evenement path déclenché");
+        //Debug.Log("Evenement path dï¿½clenchï¿½");
         foreach (string path in paths)
         {
             GameObject textPath = Instantiate(TemplateTextLogs, TemplateRootPath.transform);
@@ -115,11 +116,34 @@ public class UIBehaviour : MonoBehaviour
     private void OnEnable()
     {
         ProHandSeed.text = ProHand.Seed.ToString();
-
+        ProceduralGenerator.Input Input = ProHand.GetInput();
+        Debug.Log(Input.NodeCountRange);
+        ProHandNodeCount.text = Input.NodeCountRange.x.ToString();
+        
+        
         /*abonnement aux event*/
         //translatorInstance = new ProceduralDebugTranslator();
         TranslatorInstance.OnGraphTranslated += ShowOutputLogs;
         TranslatorInstance.OnSolutionTranslated += ShowPaths;
+    }
+    public void ChangeSeed()
+    {
+        if (int.TryParse(ProHandSeed.text, out int seed))
+        {
+            ProHand.Seed = seed;
+        }
+    }
+    public void ChangeInput()
+    {
+        if (int.TryParse(ProHandNodeCount.text, out int count))
+        {
+            ProHand.ProGenInput.NodeCountRange.x = count;
+            ProHand.ProGenInput.NodeCountRange.y = count;
+        }
+    }
+    public void getSeed()
+    {
+        ProHandSeed.text = ProHand.Seed.ToString();
     }
 
     private void OnDisable()
@@ -130,7 +154,7 @@ public class UIBehaviour : MonoBehaviour
 
     private List<List<Node>> PrintTree(Graph graph, List<List<Node>> treeLevels)
     {
-        // Initialiser la première ligne avec le nœud racine (A)
+        // Initialiser la premiï¿½re ligne avec le nï¿½ud racine (A)
         treeLevels.Add(new List<Node> { graph.GetNodeFromId(0) });
 
         // Construire les niveaux suivants
