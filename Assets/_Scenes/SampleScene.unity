@@ -206,7 +206,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 69275211}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 898198994}
+        m_TargetAssemblyTypeName: ProceduralHandler, Assembly-CSharp
+        m_MethodName: DeleteNode
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &69275211
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -871,7 +883,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 144053393}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 898198994}
+        m_TargetAssemblyTypeName: ProceduralHandler, Assembly-CSharp
+        m_MethodName: AddNewBranch
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &144053393
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2511,7 +2535,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Random Seed
+  m_Text: Custom Seed
 --- !u!222 &961259148
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -4546,7 +4570,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1632662761}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 898198994}
+        m_TargetAssemblyTypeName: ProceduralHandler, Assembly-CSharp
+        m_MethodName: AddInBetween
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1632662761
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5510,7 +5546,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 388461092}
         m_TargetAssemblyTypeName: UIBehaviour, Assembly-CSharp
-        m_MethodName: UseRandomSeed
+        m_MethodName: ToggleCustomSeed
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -5619,7 +5655,7 @@ MonoBehaviour:
         m_CallState: 2
       - m_Target: {fileID: 388461092}
         m_TargetAssemblyTypeName: UIBehaviour, Assembly-CSharp
-        m_MethodName: getSeed
+        m_MethodName: UpdateSeedField
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

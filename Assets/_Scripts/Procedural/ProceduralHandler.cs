@@ -100,11 +100,6 @@ public class ProceduralHandler : WorldBehaviour, IConfigurableComponent
 
     [SerializeField]
     private ProceduralConfig _proceduralConfig;
-    //[SerializeField]
-    //private bool _useCustomSeed;
-    //[SerializeField]
-    //[EnableIf("_useCustomSeed")]
-    //private int _seed;
     [SerializeField]
     [OnValueChanged("SelectNodes")]
     private List<char> _nodeSelection = new();

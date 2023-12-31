@@ -19,9 +19,10 @@ public class UIBehaviour : MonoBehaviour
     public ProceduralDebugTranslator TranslatorInstance;
     public TMP_InputField ProHandNodeCount;
 
-    public void UseRandomSeed()
+    public void ToggleCustomSeed()
     {
         ProHand.UseCustomSeed = !ProHand.UseCustomSeed;
+        ProHandSeed.interactable = ProHand.UseCustomSeed;
     }
 
     public void ChangeSeed()
@@ -32,7 +33,7 @@ public class UIBehaviour : MonoBehaviour
         }
     }
 
-    public void GetSeed()
+    public void UpdateSeedField()
     {
         ProHandSeed.text = ProHand.Seed.ToString();
     }
@@ -79,8 +80,12 @@ public class UIBehaviour : MonoBehaviour
             levelGrid.constraintCount = treeLevels[level].Count;
             foreach (Node node in treeLevels[level])
             {
-                GameObject TreeButton = Instantiate(TemplateTreeButton, levelObject.transform);
-                TreeButton.GetComponentInChildren<TextMeshProUGUI>().text = node.AsciiName.ToString();
+                GameObject treeButton = Instantiate(TemplateTreeButton, levelObject.transform);
+                treeButton.GetComponentInChildren<TextMeshProUGUI>().text = node.AsciiName.ToString();
+                if (treeButton.TryGetComponent<NodeSelectorButton>(out var nodeSelectorButton))
+                {
+                    nodeSelectorButton.NodeId = node.Id;
+                }
             }
         }
         // test 
@@ -116,10 +121,11 @@ public class UIBehaviour : MonoBehaviour
     private void OnEnable()
     {
         ProHandSeed.text = ProHand.Seed.ToString();
+        ProHandSeed.interactable = ProHand.UseCustomSeed;
+
         ProceduralGenerator.Input Input = ProHand.GetInput();
         Debug.Log(Input.NodeCountRange);
         ProHandNodeCount.text = Input.NodeCountRange.x.ToString();
-        
         
         /*abonnement aux event*/
         //translatorInstance = new ProceduralDebugTranslator();
