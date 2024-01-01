@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: adc04b8c16be3c94e8792e39571e86d5, type: 3}
   m_Name: AS_GridConfig
   m_EditorClassIdentifier: 
-  _cellsCount: {x: 10, y: 10}
+  _cellsCount: {x: 15, y: 10}
   _cellSize: {x: 1, y: 1}
   _offsetPosition: {x: 0, y: 0}

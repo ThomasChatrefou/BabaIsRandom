@@ -7,7 +7,7 @@ public class NodeSelector : WorldBehaviour
     public bool IsValid { get { return _selection.Count > 0; } }
     public bool HasMultiSelection { get { return _selection.Count > 1; } }
     public int LastSelectedNodeId { get { return IsValid ? _selection[^1] : Node.NULL_NODE_ID; } }
-    public int LastPreselectedNodeId { get { return HasMultiSelection ? _selection[^2] : Node.NULL_NODE_ID; } }
+    public int LastPreSelectedNodeId { get { return HasMultiSelection ? _selection[^2] : Node.NULL_NODE_ID; } }
 
     public void Select(int nodeId)
     {

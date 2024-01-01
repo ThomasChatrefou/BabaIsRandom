@@ -8,7 +8,8 @@ public class ProceduralGenerator
 {
     public struct Input
     {
-        public Vector2Int NodeCountRange;
+        public int NodesCountMin;
+        public int NodesCountMax;
         public int MaxKeyCountPerNode;
         public int Seed;
     }
@@ -21,11 +22,16 @@ public class ProceduralGenerator
         return Random.Range(UInt16.MinValue, UInt16.MaxValue);
     }
 
+    public static void FindNearestValidSeed(ref int seed)
+    {
+        Mathf.Clamp(seed, 0, Int32.MaxValue - 1);
+    }
+
     public static bool Generate(out Graph outputGraph, Input input)
     {
         Debug.Log("[ProceduralGenerator] Generating graph...");
         Random.InitState(input.Seed);
-        int nodeCount = Random.Range(input.NodeCountRange.x, input.NodeCountRange.y + 1);
+        int nodeCount = Random.Range(input.NodesCountMin, input.NodesCountMax + 1);
         bool canGenerate = nodeCount > 0;
         if (canGenerate)
         {

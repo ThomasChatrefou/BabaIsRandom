@@ -8,8 +8,8 @@ using UnityEngine;
 public class ProceduralHandler : WorldBehaviour, IConfigurableComponent
 {
     public bool UseCustomSeed { get; set; }
-    public int Seed { get; set; }
-    public ProceduralGenerator.Input ProGenInput;
+    public int Seed { get { return _seed; } }
+    public ProceduralGenerator.Input ProGenInput { get { return _generatorInput; } }
     public IProceduralTranslator Translator
     {
         get
@@ -19,17 +19,32 @@ public class ProceduralHandler : WorldBehaviour, IConfigurableComponent
         }
     }
 
+    public void SetNodesCount_Clamped(ref int count)
+    {
+        int clampedByConfig = Mathf.Clamp(count, _proceduralConfig.NodesCountMin, _proceduralConfig.NodesCountMax);
+        _generatorInput.NodesCountMin = clampedByConfig;
+        _generatorInput.NodesCountMax = clampedByConfig;
+        count = clampedByConfig;
+    }
+
+    public void SetSeed_Clamped(ref int seed)
+    {
+        ProceduralGenerator.FindNearestValidSeed(ref seed);
+        _seed = seed;
+    }
+
     public void ResetGeneratorInput()
     {
-        ProGenInput = new ProceduralGenerator.Input()
+        _generatorInput = new ProceduralGenerator.Input()
         {
-            NodeCountRange = _proceduralConfig.NodeCountRange,
+            NodesCountMin = _proceduralConfig.NodesCountMin,
+            NodesCountMax = _proceduralConfig.NodesCountMax,
             MaxKeyCountPerNode = _proceduralConfig.MaxKeyCountPerNode,
-            Seed = Seed,
         };
     }
 
     #region Editor
+
     [Button] public void Generate() => Generate_Internal();
     [Button] public void Solve() => Solve_Internal();
     [Button] public void AddNewBranch() => TryExecute(_addNewBranchModifier);
@@ -40,11 +55,7 @@ public class ProceduralHandler : WorldBehaviour, IConfigurableComponent
     {
         return "_proceduralConfig";
     }
-    public ProceduralGenerator.Input GetInput()
-    {
-        OnEnable();
-        return ProGenInput;
-    }
+
     #endregion Editor
 
     #region Private
@@ -57,12 +68,10 @@ public class ProceduralHandler : WorldBehaviour, IConfigurableComponent
             return;
         }
 
-        if (!UseCustomSeed) Seed = ProceduralGenerator.GenerateSeed();
-
-        
-        ProGenInput.Seed = Seed;
+        if (!UseCustomSeed) _seed = ProceduralGenerator.GenerateSeed();
+        _generatorInput.Seed = _seed;
     
-        ProceduralGenerator.Generate(out _graph, ProGenInput);
+        ProceduralGenerator.Generate(out _graph, _generatorInput);
 
         Translator.TranslateGraph(_graph);
     }
@@ -70,6 +79,7 @@ public class ProceduralHandler : WorldBehaviour, IConfigurableComponent
     private void Solve_Internal()
     {
         if (!_graph.IsValid) return;
+        if (_graph.Nodes.Count > _proceduralConfig.NodesCountMax) return;
         List<string> outputPaths = new();
         ProceduralSolver.Solve(ref outputPaths, _graph);
         Translator.TranslateSolutions(outputPaths);
@@ -113,6 +123,8 @@ public class ProceduralHandler : WorldBehaviour, IConfigurableComponent
     [OnValueChanged("SelectNodes")]
     private List<char> _nodeSelection = new();
 
+    private int _seed;
+    private ProceduralGenerator.Input _generatorInput;
     private IProceduralTranslator _translator;
     private Graph _graph = new(new List<Node>());
     private NodeSelector _selector;
