@@ -24,7 +24,7 @@ public class ProceduralGenerator
 
     public static void FindNearestValidSeed(ref int seed)
     {
-        Mathf.Clamp(seed, 0, Int32.MaxValue - 1);
+        seed = Mathf.Clamp(seed, UInt16.MinValue, UInt16.MaxValue - 1);
     }
 
     public static bool Generate(out Graph outputGraph, Input input)
