@@ -44,6 +44,15 @@ public partial class @InputMaster: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""MultiSelection"",
+                    ""type"": ""Button"",
+                    ""id"": ""89864e26-2102-4adb-828e-61f4b1a0bed1"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -233,6 +242,17 @@ public partial class @InputMaster: IInputActionCollection2, IDisposable
                     ""action"": ""Interact"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""be073e25-7715-47da-92f7-1d006249baca"",
+                    ""path"": ""<Keyboard>/ctrl"",
+                    ""interactions"": ""Hold"",
+                    ""processors"": """",
+                    ""groups"": ""Mouse&Keyboard"",
+                    ""action"": ""MultiSelection"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -271,6 +291,7 @@ public partial class @InputMaster: IInputActionCollection2, IDisposable
         m_Player = asset.FindActionMap("Player", throwIfNotFound: true);
         m_Player_Interact = m_Player.FindAction("Interact", throwIfNotFound: true);
         m_Player_Movement = m_Player.FindAction("Movement", throwIfNotFound: true);
+        m_Player_MultiSelection = m_Player.FindAction("MultiSelection", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -334,12 +355,14 @@ public partial class @InputMaster: IInputActionCollection2, IDisposable
     private List<IPlayerActions> m_PlayerActionsCallbackInterfaces = new List<IPlayerActions>();
     private readonly InputAction m_Player_Interact;
     private readonly InputAction m_Player_Movement;
+    private readonly InputAction m_Player_MultiSelection;
     public struct PlayerActions
     {
         private @InputMaster m_Wrapper;
         public PlayerActions(@InputMaster wrapper) { m_Wrapper = wrapper; }
         public InputAction @Interact => m_Wrapper.m_Player_Interact;
         public InputAction @Movement => m_Wrapper.m_Player_Movement;
+        public InputAction @MultiSelection => m_Wrapper.m_Player_MultiSelection;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -355,6 +378,9 @@ public partial class @InputMaster: IInputActionCollection2, IDisposable
             @Movement.started += instance.OnMovement;
             @Movement.performed += instance.OnMovement;
             @Movement.canceled += instance.OnMovement;
+            @MultiSelection.started += instance.OnMultiSelection;
+            @MultiSelection.performed += instance.OnMultiSelection;
+            @MultiSelection.canceled += instance.OnMultiSelection;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -365,6 +391,9 @@ public partial class @InputMaster: IInputActionCollection2, IDisposable
             @Movement.started -= instance.OnMovement;
             @Movement.performed -= instance.OnMovement;
             @Movement.canceled -= instance.OnMovement;
+            @MultiSelection.started -= instance.OnMultiSelection;
+            @MultiSelection.performed -= instance.OnMultiSelection;
+            @MultiSelection.canceled -= instance.OnMultiSelection;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -404,5 +433,6 @@ public partial class @InputMaster: IInputActionCollection2, IDisposable
     {
         void OnInteract(InputAction.CallbackContext context);
         void OnMovement(InputAction.CallbackContext context);
+        void OnMultiSelection(InputAction.CallbackContext context);
     }
 }

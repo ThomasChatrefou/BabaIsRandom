@@ -11,6 +11,8 @@ public class PlayerController : WorldBehaviour, IMoveAction
 {
     public event Action<Vector2Int> OnMove;
 
+    public bool IsMultiSelecting => _controls.Player.MultiSelection.ReadValue<float>() > 0f;
+
     #region Private
 
     private void Awake()

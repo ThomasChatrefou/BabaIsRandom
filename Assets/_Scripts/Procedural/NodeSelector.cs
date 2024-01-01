@@ -4,54 +4,63 @@ using UnityEngine;
 
 public class NodeSelector : WorldBehaviour
 {
-    public bool IsValid { get { return _slection.Count > 0; } }
-    public bool HasMultiSelection { get { return _slection.Count > 1; } }
-    public int LastSelectedNodeId { get { return IsValid ? _slection[^1] : Node.NULL_NODE_ID; } }
-    public int LastPreselectedNodeId { get { return HasMultiSelection ? _slection[^2] : Node.NULL_NODE_ID; } }
+    public bool IsValid { get { return _selection.Count > 0; } }
+    public bool HasMultiSelection { get { return _selection.Count > 1; } }
+    public int LastSelectedNodeId { get { return IsValid ? _selection[^1] : Node.NULL_NODE_ID; } }
+    public int LastPreselectedNodeId { get { return HasMultiSelection ? _selection[^2] : Node.NULL_NODE_ID; } }
 
     public void Select(int nodeId)
     {
-        _slection.Clear();
-        _slection.Add(nodeId);
+        _selection.Clear();
+        _selection.Add(nodeId);
     }
 
     public void MultiSelect(List<int> nodeIds)
     {
-        _slection.AddRange(nodeIds);
+        _selection.AddRange(nodeIds);
     }
 
-    public void MultiSelect_Add(int nodeId)
+    public void MultiSelect_AddOrRemove(int nodeId)
     {
-        _slection.Add(nodeId);
-    }
-
-    public void MultiSelect_Remove(int nodeId)
-    {
-        _slection.Remove(nodeId);
+        if (_selection.Contains(nodeId))
+        {
+            _selection.Remove(nodeId);
+        }
+        else
+        {
+            _selection.Add(nodeId);
+        }
     }
 
     public void MultiSelect_Clear()
     {
-        _slection.Clear();
+        _selection.Clear();
     }
 
     #region Private
 
     private void OnEnable()
     {
+        if (_nodeSelectionChannel == null || _nodeMultiSelectionChannel == null) return;
         _nodeSelectionChannel.OnEventTrigger += Select;
+        _nodeMultiSelectionChannel.OnEventTrigger += MultiSelect_AddOrRemove;
     }
 
     private void OnDisable()
     {
+        if (_nodeSelectionChannel == null || _nodeMultiSelectionChannel == null) return;
         _nodeSelectionChannel.OnEventTrigger -= Select;
+        _nodeMultiSelectionChannel.OnEventTrigger -= MultiSelect_AddOrRemove;
     }
 
     [SerializeField]
     [BoxGroup("Listening to")]
     private IntSenderEventChannelSO _nodeSelectionChannel;
+    [SerializeField]
+    [BoxGroup("Listening to")]
+    private IntSenderEventChannelSO _nodeMultiSelectionChannel;
 
-    private List<int> _slection = new();
+    private List<int> _selection = new();
 
     #endregion Private
 }

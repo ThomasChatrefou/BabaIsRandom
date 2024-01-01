@@ -4,6 +4,7 @@ using UnityEngine;
 
 [ExecuteInEditMode]
 [RequireComponent(typeof(IProceduralTranslator))]
+[RequireComponent(typeof(NodeSelector))]
 public class ProceduralHandler : WorldBehaviour, IConfigurableComponent
 {
     public bool UseCustomSeed { get; set; }
@@ -16,6 +17,16 @@ public class ProceduralHandler : WorldBehaviour, IConfigurableComponent
             _translator ??= GetComponent<IProceduralTranslator>();
             return _translator;
         }
+    }
+
+    public void ResetGeneratorInput()
+    {
+        ProGenInput = new ProceduralGenerator.Input()
+        {
+            NodeCountRange = _proceduralConfig.NodeCountRange,
+            MaxKeyCountPerNode = _proceduralConfig.MaxKeyCountPerNode,
+            Seed = Seed,
+        };
     }
 
     #region Editor
@@ -58,6 +69,7 @@ public class ProceduralHandler : WorldBehaviour, IConfigurableComponent
 
     private void Solve_Internal()
     {
+        if (!_graph.IsValid) return;
         List<string> outputPaths = new();
         ProceduralSolver.Solve(ref outputPaths, _graph);
         Translator.TranslateSolutions(outputPaths);
@@ -85,15 +97,12 @@ public class ProceduralHandler : WorldBehaviour, IConfigurableComponent
 
     private void OnEnable()
     {
-        SelectNodes();
-        ProceduralGenerator.Input input = new()
+        if (TryGetComponent(out NodeSelector selector))
         {
-            NodeCountRange = _proceduralConfig.NodeCountRange,
-            MaxKeyCountPerNode = _proceduralConfig.MaxKeyCountPerNode,
-            Seed = Seed,
-        };
-        
-        ProGenInput = input;
+            _selector = selector;
+            SelectNodes();
+        }
+        ResetGeneratorInput();
 
         Debug.Log(this.gameObject);
     }
@@ -106,7 +115,7 @@ public class ProceduralHandler : WorldBehaviour, IConfigurableComponent
 
     private IProceduralTranslator _translator;
     private Graph _graph = new(new List<Node>());
-    private NodeSelector _selector = new();
+    private NodeSelector _selector;
     private AddInBetweenModifier _addInBetweenModifier = new();
     private AddNewBranchModifier _addNewBranchModifier = new();
     private DeleteNodeModifier _deleteNodeModifier = new();

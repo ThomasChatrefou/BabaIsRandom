@@ -19,6 +19,19 @@ public class UIBehaviour : MonoBehaviour
     public ProceduralDebugTranslator TranslatorInstance;
     public TMP_InputField ProHandNodeCount;
 
+    public void ChangeInput()
+    {
+        if (int.TryParse(ProHandNodeCount.text, out int count))
+        {
+            ProHand.ProGenInput.NodeCountRange.x = count;
+            ProHand.ProGenInput.NodeCountRange.y = count;
+        }
+        else
+        {
+            ProHand.ResetGeneratorInput();
+        }
+    }
+
     public void ToggleCustomSeed()
     {
         ProHand.UseCustomSeed = !ProHand.UseCustomSeed;
@@ -51,7 +64,7 @@ public class UIBehaviour : MonoBehaviour
             // Destruction de l'enfant
             Destroy(enfant.gameObject);
         }
-        Debug.Log("Evenement logs d�clench�");
+        //Debug.Log("Evenement logs d�clench�");
         foreach (string logs in outputLogs)
         {
 
@@ -66,7 +79,7 @@ public class UIBehaviour : MonoBehaviour
         grid.constraint = GridLayoutGroup.Constraint.FixedColumnCount;
         grid.constraintCount = 1;
         PrintTree(graph, treeLevels);
-        Debug.Log(treeLevels.Count);
+        //Debug.Log(treeLevels.Count);
         for (int level = 0; level < treeLevels.Count; level++)
         {
             // Cr�ez un GameObject pour chaque niveau
@@ -96,8 +109,10 @@ public class UIBehaviour : MonoBehaviour
             {
                 row += node.AsciiName + " ";
             }
-            Debug.Log(row);
+            //Debug.Log(row);
         }
+
+        if (!ProHandNodeCount.IsInteractable()) ProHandNodeCount.text = outputLogs.Count.ToString();
     }
 
     // This can be refacto with ShowOutputLogs
@@ -124,32 +139,11 @@ public class UIBehaviour : MonoBehaviour
         ProHandSeed.interactable = ProHand.UseCustomSeed;
 
         ProceduralGenerator.Input Input = ProHand.GetInput();
-        Debug.Log(Input.NodeCountRange);
-        ProHandNodeCount.text = Input.NodeCountRange.x.ToString();
         
         /*abonnement aux event*/
         //translatorInstance = new ProceduralDebugTranslator();
         TranslatorInstance.OnGraphTranslated += ShowOutputLogs;
         TranslatorInstance.OnSolutionTranslated += ShowPaths;
-    }
-    public void ChangeSeed()
-    {
-        if (int.TryParse(ProHandSeed.text, out int seed))
-        {
-            ProHand.Seed = seed;
-        }
-    }
-    public void ChangeInput()
-    {
-        if (int.TryParse(ProHandNodeCount.text, out int count))
-        {
-            ProHand.ProGenInput.NodeCountRange.x = count;
-            ProHand.ProGenInput.NodeCountRange.y = count;
-        }
-    }
-    public void getSeed()
-    {
-        ProHandSeed.text = ProHand.Seed.ToString();
     }
 
     private void OnDisable()

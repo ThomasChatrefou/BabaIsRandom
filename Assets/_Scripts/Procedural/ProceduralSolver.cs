@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -19,6 +20,8 @@ public class ProceduralSolver
         }
     }
 
+    public static event Action<int> Solved;
+
     public static void Solve(ref List<string> outputPaths, Graph graph)
     {
 
@@ -31,6 +34,7 @@ public class ProceduralSolver
             Path = ""
         };
         Solve_Internal(ref outputPaths, initState, graph);
+        Solved?.Invoke(outputPaths.Count);
         Debug.Log($"[ProceduralSolver] {outputPaths.Count} paths found !");
     }
 

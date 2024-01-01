@@ -147,6 +147,7 @@ GameObject:
   - component: {fileID: 8498613441072852090}
   - component: {fileID: 3469247426478371869}
   - component: {fileID: 3583906901181022247}
+  - component: {fileID: -8024812462501121163}
   m_Layer: 5
   m_Name: TemplateTreeButton
   m_TagString: Untagged
@@ -257,3 +258,17 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &-8024812462501121163
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3257984598016355027}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aecf0ecf62a9ff94183e35303041f2cd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _nodeSelectionChannel: {fileID: 11400000, guid: 3faea1ca4c514644e86228c603246950, type: 2}
+  _nodeMultiSelectionChannel: {fileID: 11400000, guid: 2252a8fa9e6dadb4d85132864829dd39, type: 2}

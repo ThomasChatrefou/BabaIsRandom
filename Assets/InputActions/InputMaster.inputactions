@@ -22,6 +22,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": true
+                },
+                {
+                    "name": "MultiSelection",
+                    "type": "Button",
+                    "id": "89864e26-2102-4adb-828e-61f4b1a0bed1",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -209,6 +218,17 @@
                     "processors": "",
                     "groups": "Mouse&Keyboard",
                     "action": "Interact",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "be073e25-7715-47da-92f7-1d006249baca",
+                    "path": "<Keyboard>/ctrl",
+                    "interactions": "Hold",
+                    "processors": "",
+                    "groups": "Mouse&Keyboard",
+                    "action": "MultiSelection",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

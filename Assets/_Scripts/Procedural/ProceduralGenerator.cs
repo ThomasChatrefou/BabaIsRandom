@@ -13,6 +13,8 @@ public class ProceduralGenerator
         public int Seed;
     }
 
+    public static event Action<Graph> Generated;
+
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static int GenerateSeed()
     {
@@ -30,6 +32,7 @@ public class ProceduralGenerator
             List<Node> outputNodes = new();
             Generate_Internal(ref outputNodes, input, nodeCount);
             outputGraph = new Graph(outputNodes);
+            Generated?.Invoke(outputGraph);
             Debug.Log($"[ProceduralGenerator] {nodeCount} nodes generated !");
         }
         else
