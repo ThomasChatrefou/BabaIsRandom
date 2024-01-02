@@ -60,13 +60,11 @@ public class ProceduralSolver
     {
         state.Path += currentNode.AsciiName;
         state.NodesToVisit.Remove(currentNode.Id);
+
+        state.OwnedKeys.AddRange(currentNode.Keys);
         foreach (int childId in currentNode.Children)
         {
             state.ReachableNodes.Add(childId);
-        }
-        foreach (int keyId in currentNode.Keys)
-        {
-            state.OwnedKeys.Add(keyId);
         }
 
         int[] keysBuffer = new int[state.OwnedKeys.Count];
